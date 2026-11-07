@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فردا با ماست | دبستان جهان‌آرا</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;color:#2b2d5b;background:linear-gradient(#8fd8ff,#d9f6ff 55%,#b8f0a8 55%,#7fd46a);background-attachment:fixed;overflow-x:hidden}
+.fl{position:fixed;font-size:28px;opacity:.5;animation:fl 14s linear infinite;pointer-events:none}
+@keyframes fl{from{transform:translateY(-10vh) rotate(0)}to{transform:translateY(110vh) rotate(360deg)}}
+main{max-width:760px;margin:0 auto;padding:14px 14px 90px;position:relative}
+h1{font-size:clamp(38px,11vw,64px);margin:6px 0;text-align:center;color:#ff6b35;text-shadow:0 4px 0 #fff,0 8px 0 #ffd23f,0 12px 14px rgba(0,0,0,.25)}
+h2{text-align:center;margin:8px 0 14px}
+.sub{text-align:center;font-size:18px;font-weight:bold;color:#3b3f9e}
+.card{background:#fff;border-radius:26px;padding:18px;margin:12px 0;box-shadow:0 8px 0 #c9b6ff,0 14px 24px rgba(0,0,0,.18)}
+.scr{display:none}.scr.on{display:block;animation:pop .45s}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+button,.btn{font:inherit;font-weight:bold;font-size:20px;border:0;border-radius:20px;padding:14px 26px;color:#fff;background:linear-gradient(#ff9a3c,#ff5e3a);box-shadow:0 6px 0 #c2410c;cursor:pointer;margin:6px;transition:.1s}
+button:active{transform:translateY(5px);box-shadow:0 1px 0 #c2410c}
+button.g{background:linear-gradient(#5be37d,#1fb955);box-shadow:0 6px 0 #11823a}
+button.b{background:linear-gradient(#5aa9ff,#2f6df0);box-shadow:0 6px 0 #1b43a8}
+button:disabled{filter:grayscale(1);opacity:.5}
+.c{text-align:center}
+input,select,textarea{font:inherit;font-size:19px;width:100%;padding:12px;border-radius:16px;border:3px solid #c9b6ff;margin:6px 0 12px;background:#faf7ff;color:#2b2d5b}
+label{font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
+.job{background:#fff8e1;border:4px solid #ffd23f;border-radius:22px;padding:10px 4px;text-align:center;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 #e0a800;font-size:17px;transition:.15s}
+.job span{display:block;font-size:46px;filter:drop-shadow(0 4px 2px rgba(0,0,0,.25))}
+.job.sel{background:#d4ffe0;border-color:#1fb955;transform:scale(1.07);box-shadow:0 5px 0 #11823a}
+.sw{display:inline-block;width:44px;height:44px;border-radius:50%;margin:5px;border:4px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.35);cursor:pointer}
+.sw.sel{outline:4px solid #2b2d5b}
+#pad{width:210px;height:250px;margin:8px auto;display:block;background:radial-gradient(#fff,#e9e0ff);border-radius:40% 40% 46% 46%;border:5px dashed #9b7bff;cursor:pointer;touch-action:manipulation}
+#pad.st{animation:stp .6s}
+@keyframes stp{40%{transform:scale(.9)}100%{transform:scale(1)}}
+.stat{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.chip{background:#fff;border-radius:14px;padding:6px 12px;font-weight:bold;box-shadow:0 3px 0 #c9b6ff;font-size:15px}
+.chip.t{background:#ffd23f;font-size:18px}
+#tree{width:100%;max-height:70vh;display:block;margin:auto}
+.tg{transition:.6s}.tg:hover{transform:scale(1.4)}
+#tip{position:fixed;left:50%;transform:translateX(-50%);bottom:70px;background:#2b2d5b;color:#fff;padding:10px 18px;border-radius:16px;display:none;z-index:9;max-width:90%;text-align:center}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.gi{background:#fff;border-radius:18px;padding:10px;display:flex;gap:10px;align-items:center;box-shadow:0 4px 0 #c9b6ff}
+.gi small{display:block;color:#666}
+.gi svg{width:44px;height:44px;flex:none}
+.del{background:#e11d48;box-shadow:none;font-size:14px;padding:6px 10px;margin:0}
+footer{position:fixed;bottom:0;left:0;right:0;text-align:center;background:#3b3f9e;color:#fff;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));font-weight:bold;font-size:15px;z-index:5}
+footer a{color:#ffd23f;font-size:11px;margin-right:10px;cursor:pointer;opacity:.7}
+#warn{background:#fff3cd;color:#7a5b00;text-align:center;padding:6px;font-size:14px;display:none;border-radius:12px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="fp" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><ellipse cx="20" cy="21" rx="16" ry="18"/><ellipse cx="20" cy="21" rx="12" ry="14"/><ellipse cx="20" cy="21" rx="8" ry="10"/><ellipse cx="20" cy="21" rx="4" ry="6"/></g></symbol>
+</defs></svg>
+<span class="fl" style="right:8%;animation-delay:0s">🍃</span><span class="fl" style="right:45%;animation-delay:-5s">⭐</span><span class="fl" style="right:80%;animation-delay:-9s">🌈</span>
+<main>
+<div id="warn">⚠️ اتصال Supabase هنوز تنظیم نشده؛ بازی در حالت آزمایشی است و اطلاعات ذخیره نمی‌شود.</div>
+
+<section class="scr on" id="s0">
+<h1>فردا با ماست</h1>
+<p class="sub">«هر اثر انگشت، یک رؤیا؛ هر رؤیا، یک آینده»</p>
+<div class="card c"><div style="font-size:90px">🌳</div><h2>اثر انگشت من، فردای ایران</h2>
+<p style="font-size:18px">آرزوی شغلی‌ات را بنویس و اثر انگشت رنگی‌ات را روی درخت آرزوهای مدرسه بگذار!</p>
+<button class="g" onclick="show('s1')">🚀 شروع کنیم</button><button class="b" onclick="openEx()">🌳 دیدن درخت</button></div>
+</section>
+
+<section class="scr" id="s1"><div class="card">
+<h2>👋 خودت را معرفی کن</h2>
+<label>نام کوچک یا نام مستعار</label><input id="nm" maxlength="20" placeholder="مثلاً: علی">
+<label>پایه تحصیلی</label><select id="gr"><option value="1">اول</option><option value="2">دوم</option><option value="3">سوم</option><option value="4">چهارم</option><option value="5">پنجم</option><option value="6">ششم</option></select>
+<p style="font-size:14px;color:#666">لطفاً نام خانوادگی یا اطلاعات شخصی ننویس.</p>
+<div class="c"><button onclick="step1()">بعدی ⬅️</button></div></div></section>
+
+<section class="scr" id="s2"><div class="card">
+<h2>💫 دوست داری در آینده چه کاره شوی؟</h2>
+<div class="grid" id="jobs"></div>
+<label>یا شغل دلخواهت را بنویس:</label><input id="jn" maxlength="30" placeholder="شغل جدید..." oninput="pickOwn()">
+<div class="c"><button class="b" onclick="show('s1')">➡️ قبلی</button><button onclick="step2()">بعدی ⬅️</button></div></div></section>
+
+<section class="scr" id="s3"><div class="card">
+<h2>🤔 چرا این شغل را دوست داری؟</h2>
+<textarea id="why" rows="3" maxlength="120" placeholder="چون..."></textarea>
+<div class="c"><button class="b" onclick="show('s2')">➡️ قبلی</button><button onclick="step3()">بعدی ⬅️</button></div></div></section>
+
+<section class="scr" id="s4"><div class="card c">
+<h2>🎨 رنگ اثر انگشتت را انتخاب کن</h2><div id="sws"></div>
+<p style="font-weight:bold">حالا صفحه را لمس کن تا اثر انگشتت ثبت شود 👇</p>
+<svg id="pad" viewBox="0 0 40 40" onclick="stamp()"><use href="#fp" id="padfp" style="color:#d8cdf5" width="40" height="40"/></svg>
+<p style="font-size:13px;color:#666">این فقط یک نقش گرافیکی است؛ اثر انگشت واقعی گرفته نمی‌شود.</p>
+<button class="b" onclick="show('s3')">➡️ قبلی</button><button class="g" id="sub" disabled onclick="submit()">🌟 ثبت روی درخت</button></div></section>
+
+<section class="scr" id="s5"><div class="card c">
+<div style="font-size:80px">🏆</div><h2>آفرین قهرمان!</h2>
+<p style="font-size:21px;font-weight:bold">آفرین قهرمان! یک قدم به ساختن آینده ایران نزدیک‌تر شدی.</p>
+<button class="g" onclick="openEx()">🌳 دیدن درخت آرزوها</button></div></section>
+
+<section class="scr" id="s6">
+<h2 style="font-size:30px;color:#3b3f9e">🌳 ما آینده ایران هستیم</h2>
+<div class="stat" id="stat"></div>
+<div class="card" style="padding:6px"><svg id="tree" viewBox="0 0 400 470"></svg></div>
+<h2>🖼️ گالری آرزوها</h2><div class="gal" id="gal"></div>
+<div class="c"><button onclick="show('s0')">🏠 صفحه اول</button><button class="g" onclick="show('s1')">➕ ثبت آرزوی جدید</button></div>
+</section>
+
+<section class="scr" id="s7"><div class="card">
+<h2>🔒 پنل مدیریت</h2><div id="adm">
+<label>ایمیل مدیر</label><input id="ae" type="email" dir="ltr"><label>رمز عبور</label><input id="ap" type="password" dir="ltr">
+<div class="c"><button onclick="login()">ورود</button></div></div>
+<p id="am" class="c"></p>
+<div class="c"><button class="b" onclick="openEx()">دیدن درخت و حذف موارد نامناسب</button></div></div></section>
+</main>
+<div id="tip"></div>
+<footer>دبستان غیردولتی پسرانه جهان‌آرا <a onclick="show('s7')">مدیریت</a></footer>
+
+<script>
+/* ===== آدرس و کلید Supabase را اینجا جایگزین کنید ===== */
+const SB_URL="https://axqaivylohsynodqttix.supabase.co",SB_KEY="sb_publishable_J8CIc6CadN59HIFovHbr-A_NXBlFQPU";
+/* ====================================================== */
+const $=id=>document.getElementById(id),fa=n=>Number(n).toLocaleString('fa-IR');
+const GN=['','اول','دوم','سوم','چهارم','پنجم','ششم'];
+const JOBS=[['پزشک','🩺'],['مهندس','👷'],['معلم','👨‍🏫'],['خلبان','✈️'],['فضانورد','🚀'],['دانشمند','🔬'],['برنامه‌نویس','💻'],['ورزشکار','⚽'],['هنرمند','🎨'],['مخترع','💡']];
+const COL=['#e11d48','#f97316','#eab308','#16a34a','#0ea5e9','#2563eb','#7c3aed','#db2777'];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={color:COL[0]},db=null,isAdmin=false,list=[],stamped=false,demo=false;
+try{if(SB_URL.indexOf("YOUR")<0){db=supabase.createClient(SB_URL,SB_KEY)}}catch(e){console.error(e)}
+if(!db){demo=true;$('warn').style.display='block'}
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==id));scrollTo(0,0)}
+JOBS.forEach(([n,e])=>{const d=document.createElement('div');d.className='job';d.innerHTML='<span>'+e+'</span>'+n;d.onclick=()=>{S.job=n;$('jn').value='';document.querySelectorAll('.job').forEach(x=>x.classList.remove('sel'));d.classList.add('sel')};$('jobs').appendChild(d)});
+function pickOwn(){if($('jn').value.trim()){S.job=null;document.querySelectorAll('.job').forEach(x=>x.classList.remove('sel'))}}
+COL.forEach((c,i)=>{const d=document.createElement('span');d.className='sw'+(i?'':' sel');d.style.background=c;d.onclick=()=>{S.color=c;document.querySelectorAll('.sw').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');if(stamped)$('padfp').style.color=c};$('sws').appendChild(d)});
+function step1(){const n=$('nm').value.trim();if(!n){alert('لطفاً نامت را بنویس 😊');return}S.name=n;S.grade=+$('gr').value;show('s2')}
+function step2(){const o=$('jn').value.trim();if(o)S.job=o;if(!S.job){alert('یک شغل انتخاب کن یا بنویس 😊');return}show('s3')}
+function step3(){S.why=$('why').value.trim();show('s4')}
+function stamp(){stamped=true;$('padfp').style.color=S.color;const p=$('pad');p.classList.remove('st');void p.offsetWidth;p.classList.add('st');$('sub').disabled=false;beep()}
+function beep(){try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=660;o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(.15,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.3);o.start();o.stop(a.currentTime+.3)}catch(e){}}
+async function submit(){
+ $('sub').disabled=true;
+ const w={name:S.name,grade:S.grade,job:S.job,why:S.why||'',color:S.color,seed:Math.floor(Math.random()*1e6)};
+ try{
+  if(demo){w.id='d'+Date.now();list.push(w);render()}
+  else{const r=await db.from('wishes').insert(w);if(r.error)throw r.error;await load()}
+  stamped=false;$('padfp').style.color='#d8cdf5';$('nm').value='';$('jn').value='';$('why').value='';S.job=null;
+  document.querySelectorAll('.job').forEach(x=>x.classList.remove('sel'));show('s5');
+ }catch(e){alert('خطا در ثبت. اینترنت را بررسی کن و دوباره تلاش کن.');$('sub').disabled=false;console.error(e)}
+}
+function openEx(){show('s6');render();load()}
+async function load(){if(!db)return;const r=await db.from('wishes').select('*').order('created_at',{ascending:true}).limit(1000);if(!r.error){list=r.data;render()}else console.error(r.error)}
+load();setInterval(()=>{if($('s6').classList.contains('on'))load()},10000);
+function jobEmoji(j){const f=JOBS.find(x=>x[0]==j);return f?f[1]:'⭐'}
+const IRL=[[44.0,39.4],[45.0,39.8],[46.2,38.9],[47.9,39.7],[48.4,39.0],[48.9,38.4],[49.0,37.6],[50.0,37.4],[51.2,36.8],[52.3,36.7],[53.9,36.9],[54.0,37.4],[55.4,38.0],[56.3,38.1],[57.3,37.6],[59.3,37.5],[60.4,36.6],[61.2,36.6],[61.1,35.6],[60.8,34.5],[60.5,33.7],[60.9,33.5],[60.6,32.0],[61.8,31.4],[60.9,29.8],[62.5,29.4],[61.6,28.0],[62.8,27.1],[63.3,26.6],[61.6,25.2],[59.0,25.4],[57.3,25.7],[56.5,27.1],[54.5,26.6],[53.0,26.7],[51.5,27.9],[50.5,29.5],[49.5,30.2],[48.9,30.4],[48.5,29.9],[47.7,31.0],[47.8,32.0],[46.1,32.9],[45.4,33.9],[45.9,34.6],[45.5,35.9],[44.8,37.2],[44.3,38.3]];
+const IRP2=IRL.map(([lo,la])=>[+(30+(lo-43.5)*17).toFixed(1),+(10+(39.9-la)*20).toFixed(1)]);
+const IRD='M'+IRP2.map(p=>p.join(' ')).join('L')+'Z';
+function inIR(x,y){let c=false;for(let i=0,j=IRP2.length-1;i<IRP2.length;j=i++){const a=IRP2[i],b=IRP2[j];if((a[1]>y)!=(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
+function hal(i,b){let f=1,r=0;while(i>0){f/=b;r+=f*(i%b);i=Math.floor(i/b)}return r}
+const IRP=[];for(let k=1;IRP.length<220&&k<6000;k++){const x=28+hal(k,2)*342,y=8+hal(k,3)*300;if(inIR(x,y))IRP.push([x,y])}
+function render(){
+ const n=list.length,g=Math.min(n,100)/100,sc=.62+.38*g;
+ let s='<defs><radialGradient id="cg" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#7bec6b"/><stop offset="1" stop-color="#1f9d3a"/></radialGradient></defs>';
+ s+='<ellipse cx="200" cy="462" rx="205" ry="24" fill="#5bbf4a"/>';
+ s+='<path d="M140 470 Q172 440 180 380 Q186 320 178 245 L224 245 Q216 320 222 380 Q230 440 262 470Z" fill="#8b5a2b"/><path d="M200 330 L150 285M200 310 L255 270" stroke="#8b5a2b" stroke-width="10" stroke-linecap="round"/>';
+ s+='<g transform="translate(200 250) scale('+sc.toFixed(3)+') translate(-200 -250)"><path d="'+IRD+'" fill="#157a2d" stroke="#157a2d" stroke-width="10" stroke-linejoin="round" transform="translate(0 6)"/><path d="'+IRD+'" fill="url(#cg)" stroke="#2fb34a" stroke-width="8" stroke-linejoin="round"/>';
+ if(!n)s+='<text x="200" y="160" text-anchor="middle" font-size="16" fill="#fff" font-weight="bold">منتظر اولین اثر انگشت 🌱</text>';
+ const V=list.slice(0,200),m=V.length,sz=m>120?11:m>60?14:m>25?19:25;
+ V.forEach((w,i)=>{const [x,y]=IRP[i];
+  s+='<g class="tg" style="transform-origin:'+x+'px '+y+'px" onclick="tip('+i+')"><circle cx="'+x+'" cy="'+y+'" r="'+(sz*.62)+'" fill="#fff" opacity=".9"/><use href="#fp" x="'+(x-sz/2)+'" y="'+(y-sz/2)+'" width="'+sz+'" height="'+sz+'" style="color:'+esc(w.color)+'"/>'+(m<=30?'<text x="'+x+'" y="'+(y+sz*.95)+'" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">'+esc(w.job)+'</text>':'')+'</g>'});
+ s+='</g>';
+ $('tree').innerHTML=s;
+ let st='<span class="chip t">👦 کل شرکت‌کنندگان: '+fa(n)+'</span>';
+ for(let k=1;k<=6;k++)st+='<span class="chip">پایه '+GN[k]+': '+fa(list.filter(w=>w.grade==k).length)+'</span>';
+ $('stat').innerHTML=st;
+ $('gal').innerHTML=list.slice().reverse().map(w=>'<div class="gi"><svg viewBox="0 0 40 40" style="color:'+esc(w.color)+'"><use href="#fp"/></svg><div><b>'+esc(w.name)+'</b> <small style="display:inline">(پایه '+GN[w.grade]+')</small><div>'+jobEmoji(w.job)+' '+esc(w.job)+'</div>'+(w.why?'<small>'+esc(w.why)+'</small>':'')+(isAdmin?'<button class="del" onclick="del(\''+w.id+'\')">حذف</button>':'')+'</div></div>').join('');
+}
+let tt;function tip(i){const w=list[i];if(!w)return;const t=$('tip');t.innerHTML='<b>'+esc(w.name)+'</b> — '+jobEmoji(w.job)+' '+esc(w.job)+(w.why?'<br><small>'+esc(w.why)+'</small>':'');t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',3500)}
+async function login(){if(!db){$('am').textContent='ابتدا Supabase را تنظیم کنید.';return}
+ try{const r=await db.auth.signInWithPassword({email:$('ae').value.trim(),password:$('ap').value});if(r.error)throw r.error;isAdmin=true;$('adm').style.display='none';$('am').textContent='✅ وارد شدید. حالا در گالری دکمه حذف دیده می‌شود.';render()}catch(e){$('am').textContent='❌ ایمیل یا رمز اشتباه است.'}}
+async function del(id){if(!isAdmin||!confirm('این مورد حذف شود؟'))return;try{const r=await db.from('wishes').delete().eq('id',id).select();if(r.error||!r.data.length)throw 1;await load()}catch(e){alert('حذف نشد؛ دسترسی مدیر را بررسی کنید.')}}
+</script>
+</body>
+</html>
